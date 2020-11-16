@@ -27,16 +27,13 @@ except Exception as err:
 
 cursor = connection.cursor()
 
-ZIP_sql_select_Query1 = "DROP TABLE IF EXISTS postcode_table;"
-ZIP_sql_select_Query2 = 'CREATE TABLE postcode_table (PC6 VARCHAR PRIMARY KEY, Buurt2020 int, Wijk2020 int, Gemeente2020 int);'
-cursor.execute(ZIP_sql_select_Query1)
-cursor.execute(ZIP_sql_select_Query2)
+cursor.execute("DROP TABLE IF EXISTS postcode_table;")
+cursor.execute('CREATE TABLE postcode_table (PC6 VARCHAR PRIMARY KEY, Buurt2020 int, Wijk2020 int, Gemeente2020 int);')
 
 # SQL Setup
-FundaDB_sql_select_Query1 = "DROP TABLE IF EXISTS fundahousingnl;"
-FundaDB_sql_select_Query2 = 'CREATE TABLE fundahousingnl ( global_ID INT PRIMARY KEY, publicatie_datum VARCHAR, postcode VARCHAR, koopprijs VARCHAR(50),categorieobject TEXT, bouwjaar VARCHAR, ind_tuin VARCHAR, perceel_oppervlakte VARCHAR(50),aantal_kamers VARCHAR, aantal_badkamers VARCHAR(50), energielabel_klasse TEXT, oppervlakte VARCHAR, PC6 varchar, FOREIGN KEY (PC6) REFERENCES postcode_table(PC6));'
-cursor.execute(FundaDB_sql_select_Query1)
-cursor.execute(FundaDB_sql_select_Query2)
+cursor.execute("DROP TABLE IF EXISTS fundahousingnl;")
+cursor.execute('CREATE TABLE fundahousingnl ( global_ID INT PRIMARY KEY, publicatie_datum VARCHAR, postcode VARCHAR, koopprijs VARCHAR(50),categorieobject TEXT, bouwjaar VARCHAR, ind_tuin VARCHAR, perceel_oppervlakte VARCHAR(50),aantal_kamers VARCHAR, aantal_badkamers VARCHAR(50), energielabel_klasse TEXT, oppervlakte VARCHAR, PC6 varchar, FOREIGN KEY (PC6) REFERENCES postcode_table(PC6));')
+
 
 
 
