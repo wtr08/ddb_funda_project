@@ -130,27 +130,7 @@ sql = "COPY gemiddelde_verkoopprijzen FROM STDIN DELIMITER ',' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
 
-
-
-
-# zip_contents = open(f"{path}/data/2020-cbs-pc6huisnr20200801-buurt/pc6-gwb20201.csv")
-# cursor.copy_from(zip_contents, "postcode_table", columns=('PC6', 'Buurt2020', 'Wijk2020', 'Gemeente2020'), sep=";")
-
-
-# # Make the changes to the database persistent
-# connection.commit()
-
-#1# Orange (funda2018) 
-
-
-# # create inner joins
-# ZIP_sql_select_Query1 = "DROP TABLE IF EXISTS postcode_joined;"
-# ZIP_sql_select_Query2 = 'CREATE TABLE postcode_joined (global_ID int, koopprijs varchar, PC6 varchar, Gemeente2020 int, postcode varchar);'
-# ZIP_sql_select_Query3 = 'SELECT fundahousingnl.global_ID, fundahousingnl.koopprijs, postcode_table.PC6, postcode_table.Gemeente2020, fundahousingnl.postcode INTO postcode_joined FROM fundahousingnl INNER JOIN postcode_table ON fundahousingnl.postcode = postcode_table.PC6'
-
-# cursor.execute(ZIP_sql_select_Query2)
-# cursor.execute(ZIP_sql_select_Query3)
-
+print("Hurray! Data is loaded")
 # Close communication with the database
 cursor.close()
 connection.close()
