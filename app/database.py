@@ -27,6 +27,7 @@ except Exception as err:
 
 cursor = connection.cursor()
 
+print("Inserting tables")
 
 # 1. [Orange] -- Setup Funda Table
 cursor.execute("DROP TABLE IF EXISTS funda2018 CASCADE;")
@@ -69,15 +70,67 @@ cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemee
 cursor.execute("DROP TABLE IF EXISTS Gemiddelde_verkoopprijzen CASCADE;")
 cursor.execute('CREATE TABLE Gemiddelde_verkoopprijzen ( Gemeentenaam VARCHAR NOT NULL PRIMARY KEY, Year_2014 INTEGER, Year_2015 INTEGER, Year_2016 INTEGER, Year_2017 INTEGER, Year_2018 INTEGER );')
 
-
-
 connection.commit()
 
-
-csv_file_name = f"{path}/data//1_Orange/suley_tested/funda2018_utf8.csv"
+print("loading data")
+## -- Load data into tables -- ###
+## 1. Orange (funda2018)
+## 1.1 funda2018
+csv_file_name = f"{path}/data/1_Orange/suley_tested/funda2018_utf8.csv"
 sql = "COPY funda2018 FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
+
+# ## 2. Pink (Postcode 2018)
+# ## 2.1 postcode2018
+csv_file_name = f"{path}/data/2_Pink/suley_tested/postcode2018_utf8.csv"
+sql = "COPY postcode2018 FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 2.1 buurtnaam2018
+csv_file_name = f"{path}/data/2_Pink/suley_tested/buurtnaam2018_utf8.csv"
+sql = "COPY buurtnaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 2.2 gemeentenaam2018
+csv_file_name = f"{path}/data/2_Pink/suley_tested/gemeentenaam2018_utf8.csv"
+sql = "COPY gemeentenaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 2.3 wijknaam2018
+csv_file_name = f"{path}/data/2_Pink/suley_tested/wijknaam2018_utf8.csv"
+sql = "COPY wijknaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+
+# ## 3. Yellow
+# ## 3.1 Gemeente Facilities Gemeente 
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/afstandfacilitiesutf8.csv"
+sql = "COPY gemeente_afstand_facilities FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 3.7 Wijk Facilities Buurt
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/wijk_facilities_buurt_utf8.csv"
+sql = "COPY wijk_facilities_buurt FROM STDIN DELIMITER ',' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/gemeente_utf8_facilitiesssss.csv"
+sql = "COPY gemeente_facilities_gemeentes FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 3.2 CBS_Municipality
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/cbs_muni_utf8.csv"
+sql = "COPY CBS_Municipality FROM STDIN DELIMITER ';' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+# ## 3.3 Gemiddelde Verkoopprijzen
+csv_file_name = f"{path}/data/4_Green/suley tested/gemiddelde_verkoopprijzen_utf8.csv"
+sql = "COPY gemiddelde_verkoopprijzen FROM STDIN DELIMITER ',' CSV HEADER"
+cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.execute("COMMIT;")
+
+
 
 
 # zip_contents = open(f"{path}/data/2020-cbs-pc6huisnr20200801-buurt/pc6-gwb20201.csv")
