@@ -71,6 +71,7 @@ cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemee
 cursor.execute("DROP TABLE IF EXISTS Gemiddelde_verkoopprijzen CASCADE;")
 cursor.execute('CREATE TABLE Gemiddelde_verkoopprijzen ( Gemeentenaam VARCHAR NOT NULL PRIMARY KEY, Year_2014 INTEGER, Year_2015 INTEGER, Year_2016 INTEGER, Year_2017 INTEGER, Year_2018 INTEGER );')
 
+connection.commit()
 
 # ## STEP 3 -> Connect keys among each other
 # #1##########connecting funda2018(postcode) with postcode2018(pc6)##
@@ -92,7 +93,6 @@ cursor.execute('CREATE TABLE Gemiddelde_verkoopprijzen ( Gemeentenaam VARCHAR NO
 # #9# 
 # cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY (gemeentenaam) REFERENCES gemiddelde_verkoopprijzen(gemeentenaam);')
 
-connection.commit()
 
 print("loading data")
 ## -- Load data into tables -- ###
