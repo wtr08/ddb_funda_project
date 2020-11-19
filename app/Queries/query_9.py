@@ -30,6 +30,7 @@ except Exception as err:
     print("Error")
 cursor = connection.cursor()
 
+# Getting database results and convert them into dataframe
 cursor.execute("SELECT global_id, postcode, koopprijs  FROM funda2018;")
 fundadata=pd.DataFrame(cursor.fetchall(),columns=['global_id', 'postcode', 'koopprijs'])
 
@@ -46,29 +47,42 @@ cursor.execute("SELECT *  FROM gemiddelde_verkoopprijzen;")
 verkoop=pd.DataFrame(cursor.fetchall(),columns=['Gemeentenaam','2014','2015', '2016','2017', '2018'])
 
 # What are the price trends, average municipality price from 2014 till 2018, and average price in per neigborhoud  2018? 
-# [funda Global ID -> postcode PC6] -> [Postcode Gemeent2018 -> Gemeente gemmcode] -> [gemeente2018  gemeentanaam -> CBS gemeentenaam] -> [CBS gemeentenaam -> verkoop gemeentenaam]
 
+# Inner joins dataframes 
 # [funda Global ID -> postcode PC6] 
 funda_gemeente = pd.merge(fundadata, postcode, how='left', left_on='postcode', right_on='PC6')
 
+# Inner join dataframes
 # [Postcode Gemeent2018 -> Gemeente gemmcode]
 postcode_gemeente = pd.merge(funda_gemeente, gemeente, how='left', left_on='Gemeente2018', right_on='Gemcode')
 
+#inner join dataframes
 #verkoopprijs
 gemeente_verkoop = pd.merge(postcode_gemeente, verkoop, how='left', left_on='Gemeentenaam', right_on='Gemeentenaam')
 gemeente_verkoop = gemeente_verkoop.dropna()
 
-# Result price per municipality
-# print(gemeente_verkoop)
+# Check gemeente dataframne
+print(gemeente_verkoop)
 
 # Avarage price per neighborhood
-# buurt
+# Inner join funda_gemeente en buurt 
 buurt_verkoop = pd.merge(funda_gemeente, buurt, how='left', left_on='Buurt2018', right_on='Buurtcode')
-# print(buurt_verkoop)
+print(buurt_verkoop)
 
+# inner join gemeente verkoop and buurt verkoop
+funda_buurt_gemeente_verkoop = pd.merge(gemeente_verkoop, buurt_verkoop, how='left', left_on='global_id', right_on='global_id')
+# Delete several columns to get a more clean dataframe
+funda_buurt_gemeente_verkoop = funda_buurt_gemeente_verkoop.drop(['PC6_x', 'Buurt2018_x', 'Wijk2018_x', 'PC6_y', 'Buurt2018_y', 'Wijk2018_y', 'Gemeente2018_y', 'Buurtcode', 'Gemeente2018_x', 'Gemcode', 'postcode_y', 'koopprijs_y'], axis=1)
+
+#Calculate the mean per buurt
 Mean_buurt = buurt_verkoop.groupby(['Buurtnaam'])['koopprijs'].mean().reset_index()
 
-Mean_buurt.to_csv("storage/query9.csv", sep=';', decimal=",")
+# Merge mean buurt withg buurt gemeente with avargae house price per year 
+funda_buurt_gemeente_verkoop_and_buurt_mean = pd.merge(funda_buurt_gemeente_verkoop, Mean_buurt, how='left', left_on='Buurtnaam', right_on='Buurtnaam')
+print(funda_buurt_gemeente_verkoop_and_buurt_mean)
+
+# Export to csv
+funda_buurt_gemeente_verkoop_and_buurt_mean.to_csv("storage/query9.csv", sep=';', decimal=",")
 
 
 

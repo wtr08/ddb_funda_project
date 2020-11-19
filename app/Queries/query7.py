@@ -81,56 +81,56 @@ funda_buurt_facilties_clean = funda_buurt_facilties.dropna()
 #gemeente data
 aptoheek = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_apotheek_km'] < 10.0 )]
 distance_apotheek = aptoheek[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_apotheek_km']]
-print(distance_apotheek)
+# print(distance_apotheek)
 
 ziekenhuis = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_ziekenhuis_km'] < 20.0 )]
 distance_ziekenhuis = ziekenhuis[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_ziekenhuis_km']]
-print(distance_ziekenhuis)
+# print(distance_ziekenhuis)
 
 levensmiddelen = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_levensmiddelen_km'] < 6.0 )]
 distance_levensmiddelen = levensmiddelen[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_levensmiddelen_km']]
-print(distance_levensmiddelen)
+# print(distance_levensmiddelen)
 
 cafe = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_cafe_km'] < 11.0 )]
 distance_cafe = cafe[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_cafe_km']]
-print(distance_cafe)
+# print(distance_cafe)
 
 restaurant = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_restaurant_km'] < 11.0 )]
 distance_restaurant = restaurant[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_restaurant_km']]
-print(distance_restaurant)
+# print(distance_restaurant)
 
 middelbareschool = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_middelbareschool_km'] < 6.0 )]
 distance_middelbareschool = middelbareschool[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_middelbareschool_km']]
-print(distance_middelbareschool)
+# print(distance_middelbareschool)
 
 hoofdverkeersweg = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_oprit_hoofdverkeersweg_km'] < 17.0 )]
 distance_hoofdverkeersweg = hoofdverkeersweg[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_oprit_hoofdverkeersweg_km']]
-print(distance_hoofdverkeersweg)
+# print(distance_hoofdverkeersweg)
 
 treinstations = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_treinstations_km'] < 5.0 )]
 distance_treinstations = treinstations[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_treinstations_km']]
-print(distance_treinstations)
+# print(distance_treinstations)
 
 podiumkunsten = funda_gemeente_facilties_clean.loc[(funda_gemeente_facilties_clean['Afstand_tot_podiumkunsten_km'] < 30.0 )]
 distance_podiumkunsten = podiumkunsten[['global_id', 'postcode', 'Gemeentenaam', 'Afstand_tot_podiumkunsten_km']]
-print(distance_podiumkunsten)
+# print(distance_podiumkunsten)
 
 #buurtdata
 huisartsenpraktijk = funda_buurt_facilties_clean.loc[(funda_buurt_facilties_clean['Afstand_tot_huisartsenpraktijk_km'] < 5.0 )]
 distance_huisartsenpraktijk = huisartsenpraktijk[['global_id', 'postcode', 'Gemeentenaam','Buurtnaam', 'Afstand_tot_huisartsenpraktijk_km']]
-print(distance_huisartsenpraktijk)
+# print(distance_huisartsenpraktijk)
 
 grote_supermarkt = funda_buurt_facilties_clean.loc[(funda_buurt_facilties_clean['Afstand_tot_grote_supermarkt_km'] < 11.0 )]
 distance_grote_supermarkt = grote_supermarkt[['global_id', 'postcode', 'Gemeentenaam','Buurtnaam', 'Afstand_tot_grote_supermarkt_km']]
-print(distance_grote_supermarkt)
+# print(distance_grote_supermarkt)
 
 kinderdagverblijf = funda_buurt_facilties_clean.loc[(funda_buurt_facilties_clean['Afstand_tot_kinderdagverblijf_km'] < 5.0 )]
 distance_kinderdagverblijf = kinderdagverblijf[['global_id', 'postcode', 'Gemeentenaam','Buurtnaam', 'Afstand_tot_kinderdagverblijf_km']]
-print(distance_kinderdagverblijf)
+# print(distance_kinderdagverblijf)
 
 basisschool = funda_buurt_facilties_clean.loc[(funda_buurt_facilties_clean['Afstand_tot_school_km'] < 5.0 )]
 distance_basisschool = basisschool[['global_id', 'postcode', 'Gemeentenaam','Buurtnaam', 'Afstand_tot_school_km']]
-print(distance_basisschool)
+# print(distance_basisschool)
 
 
 cursor.close()
@@ -138,5 +138,9 @@ connection.close()
 
 csv = [distance_apotheek,distance_ziekenhuis, distance_levensmiddelen, distance_cafe, distance_restaurant, distance_middelbareschool, distance_hoofdverkeersweg, distance_treinstations, distance_podiumkunsten, distance_huisartsenpraktijk, distance_grote_supermarkt, distance_kinderdagverblijf, distance_basisschool]
 
+i = 0;
 for row in range(len(csv)):
-    distance_apotheek.to_csv(f"storage/query_7_{row}.csv", sep=';' , decimal=",")
+    # print(row)
+    csv[i].to_csv(f"storage/query_7_{row}.csv", sep=';' , decimal=",")
+    i = i + 1
+
