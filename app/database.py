@@ -20,9 +20,9 @@ try:
         host = "localhost",
         user = DB_username,
         password = DB_password,
-        database = "fundaDB"
+        database = "suleymanekiz"
     )
-    print("Database connection succesfully")
+    print("Database connection succesfully!")
 except Exception as err:
     print("Error")
 
@@ -31,11 +31,11 @@ cursor = connection.cursor()
 # Inserting tables. First the tables is dropped if exists.
 # After A new table has been created. 
 # This could also have been done with UPDATE, but for people that are new don't have the posibility to udpate their table because it does not exits
-print("Inserting tables")
+print("Inserting tables...")
 
 # 1. [Orange] -- Setup Funda Table
-cursor.execute("DROP TABLE IF EXISTS funda2018 CASCADE;")
-cursor.execute('CREATE TABLE funda2018 ( global_id INTEGER NOT NULL PRIMARY KEY, publicatie_datum VARCHAR, postcode VARCHAR, koopprijs INT, volledige_omschrijving VARCHAR, soort_woning VARCHAR, bouwjaar VARCHAR, oppervlakte VARCHAR, datum_ondertekening VARCHAR );')
+cursor.execute("DROP TABLE IF EXISTS funda2018_dirty CASCADE;")
+cursor.execute('CREATE TABLE funda2018_dirty ( global_id INTEGER NOT NULL PRIMARY KEY, publicatie_datum VARCHAR, postcode VARCHAR, koopprijs INT, volledige_omschrijving VARCHAR, soort_woning VARCHAR, bouwjaar VARCHAR, oppervlakte VARCHAR, datum_ondertekening VARCHAR );')
 
 # 2. [Pink] -- Setup Postcode2018 Table
 cursor.execute("DROP TABLE IF EXISTS postcode2018 CASCADE;")
@@ -63,26 +63,33 @@ cursor.execute('CREATE TABLE Gemeente_facilities_gemeentes ( Gemeentenaam VARCHA
 
 # 8. [Yellow] -- Setup Wijk_facilities_buurt Table
 cursor.execute("DROP TABLE IF EXISTS Wijk_facilities_buurt CASCADE;")
-cursor.execute('CREATE TABLE Wijk_facilities_buurt ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering varchar, Woningvoorraad INTEGER, Percentage_bewoond INTEGER, Percentage_onbewoond INTEGER, Diefstal_uit_woning INTEGER, Vernieling INTEGER, Geweld INTEGER, Afstand_tot_huisenpraktijk NUMERIC, Afstand_tot_grote_supermarkt NUMERIC, Afstand_tot_kinderverblijf NUMERIC, Afstand_tot_school NUMERIC );')
+cursor.execute('CREATE TABLE Wijk_facilities_buurt ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering INTEGER, Woningvoorraad INTEGER, Percentage_bewoond INTEGER, Percentage_onbewoond INTEGER, Diefstal_uit_woning INTEGER, Vernieling INTEGER, Geweld INTEGER, Afstand_tot_huisenpraktijk NUMERIC, Afstand_tot_grote_supermarkt NUMERIC, Afstand_tot_kinderverblijf NUMERIC, Afstand_tot_school NUMERIC );')
 
 # 9. [Yellow] -- Setup CBS_municipality Table
 cursor.execute("DROP TABLE IF EXISTS CBS_Municipality CASCADE;")
-cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering varchar, Mannen INTEGER, Vrouwen INTEGER, _0_tot_15 INTEGER, _15_tot_25 INTEGER, _25_tot_45 INTEGER, _45_tot_65 INTEGER, _65_or_older INTEGER, Bevolkingsdichtheid INTEGER, Gemiddeld_inkomen_per_inwoner NUMERIC );')
+cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering INTEGER, Mannen INTEGER, Vrouwen INTEGER, _0_tot_15 INTEGER, _15_tot_25 INTEGER, _25_tot_45 INTEGER, _45_tot_65 INTEGER, _65_or_older INTEGER, Bevolkingsdichtheid INTEGER, Gemiddeld_inkomen_per_inwoner NUMERIC );')
 
 
 # 10. [Green] -- Setup gemiddelde_verkoopprijzen Table
 cursor.execute("DROP TABLE IF EXISTS Gemiddelde_verkoopprijzen CASCADE;")
 cursor.execute('CREATE TABLE Gemiddelde_verkoopprijzen ( Gemeentenaam VARCHAR NOT NULL PRIMARY KEY, Year_2014 INTEGER, Year_2015 INTEGER, Year_2016 INTEGER, Year_2017 INTEGER, Year_2018 INTEGER );')
 
+print("Hurray! The tables and primary keys are in!")
+
+
+#commit 
 connection.commit()
 
-print("loading data")
+
+
+print("Loading data...")
+
 
 ## -- Load data into tables -- ###
 ## 1. Orange (funda2018)
 ## 1.1 funda2018
 csv_file_name = f"{path}/data/1_Orange/suley_tested/funda2018_utf8.csv"
-sql = "COPY funda2018 FROM STDIN DELIMITER ';' CSV HEADER"
+sql = "COPY funda2018_dirty FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
 
@@ -92,52 +99,82 @@ csv_file_name = f"{path}/data/2_Pink/suley_tested/new/postcode2018_utf8.csv"
 sql = "COPY postcode2018 FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 2.1 buurtnaam2018
+# ## 2.2 buurtnaam2018
 csv_file_name = f"{path}/data/2_Pink/suley_tested/new/buurtnaam2018_utf8.csv"
 sql = "COPY buurtnaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 2.2 gemeentenaam2018
-csv_file_name = f"{path}/data/2_Pink/suley_tested/new/gemeentenaam2018_utf8.csv"
+# ## 2.3 gemeentenaam2018
+csv_file_name = f"{path}/data/2_Pink/suley_tested/new/newgemeentenaam2018_utf8.csv"
 sql = "COPY gemeentenaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 2.3 wijknaam2018
+# ## 2.4 wijknaam2018
 csv_file_name = f"{path}/data/2_Pink/suley_tested/new/wijknaam2018_utf8.csv"
 sql = "COPY wijknaam2018 FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
 
 # ## 3. Yellow
-# ## 3.1 Gemeente Facilities Gemeente 
-csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/afstandfacilitiescsvutf8.csv"
+# ## 3.1 Gemeente Afstand Facilities 
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/newafstandfacilitiescsvutf8.csv"
 sql = "COPY gemeente_afstand_facilities FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 3.7 Wijk Facilities Buurt
-csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/wijk_facilities_buurt_utf8.csv"
+# ## 3.2 Wijk Facilities Buurt
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/wijk_facilities_buurt_utf8_new.csv"
 sql = "COPY wijk_facilities_buurt FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-
-csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/gemeente_utf8_facilitiesssss.csv"
+# ## 3.3 Gemeente Facilities Gemeente
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/gemeente_utf8_facilitiez.csv"
 sql = "COPY gemeente_facilities_gemeentes FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 3.2 CBS_Municipality
-csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/cbs_muni_utf8.csv"
+# ## 3.4 CBS_Municipality
+csv_file_name = f"{path}/data/3_Yellow/suley_tested/new/cbs_muni_query6_new.csv"
 sql = "COPY CBS_Municipality FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
-# ## 3.3 Gemiddelde Verkoopprijzen
+
+# ## 4. Green
+# ## 4.1 Gemiddelde Verkoopprijzen
 csv_file_name = f"{path}/data/4_Green/suley_tested/new/gemiddelde_verkoopprijzen_utf8.csv"
 sql = "COPY gemiddelde_verkoopprijzen FROM STDIN DELIMITER ';' CSV HEADER"
 cursor.copy_expert(sql, open(csv_file_name, "r"))
 cursor.execute("COMMIT;")
 
 print("Hurray! Data is loaded")
+
+
+#innerjoin funda zipcodes with postcode2018
+cursor.execute("DROP TABLE IF EXISTS funda2018 CASCADE;")
+cursor.execute("CREATE TABLE funda2018 AS SELECT * FROM funda2018_dirty INNER JOIN postcode2018 on postcode2018.pc6 = funda2018_dirty.postcode")
+connection.commit()
+
+## STEP 3 -> Connect keys among each other
+#1##########connecting funda2018(postcode) with postcode2018(pc6)##
+cursor.execute('ALTER TABLE funda2018 ADD FOREIGN KEY (postcode) REFERENCES postcode2018(pc6);')
+#2#### connecting postcode2018(Buurt2018) with buurtnaam2018(buurtcode)##
+cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Buurt2018) REFERENCES buurtnaam2018(buurtcode);')
+#3# connecting postcode2018(Wijk2018) with wijknaam2018(Wijkcode)##
+cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Wijk2018) REFERENCES wijknaam2018(Wijkcode);')
+#4# connecting postcode2018(Gemeente2018) with gemeentenaam2018(Gemcode)#
+cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Gemeente2018) REFERENCES gemeentenaam2018(Gemcode);')
+#5# connecting gemeentenaam2018(gemeentenaam) with gemeente_afstand_facilities (Gemeentenaam)#
+cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY (gemeentenaam) REFERENCES gemeente_afstand_facilities(Gemeentenaam);')
+#6# connecting gemeentenaam2018(gemeentenaam) with gemeente_facilities_gemeentes(Gemeentenaam)#
+cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY(Gemeentenaam) REFERENCES gemeente_facilities_gemeentes(Gemeentenaam);')
+#7# connecting wijk_facilities_buurt (Codering) with buurtnaam2018(Buurtcode)#
+cursor.execute('ALTER TABLE wijk_facilities_buurt ADD FOREIGN KEY (Codering) REFERENCES buurtnaam2018(Buurtcode);')
+#8# connecting cbs_municipality (codering) with gemeentenaam2018(Gemcode)#
+cursor.execute('ALTER TABLE cbs_municipality ADD FOREIGN KEY (codering) REFERENCES gemeentenaam2018(Gemcode);')
+#9# connecting gemeentenaam2018(gemeentenaam) with gemiddelde_verkoopprijzen(gemeentenaam)
+cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY (gemeentenaam) REFERENCES gemiddelde_verkoopprijzen(gemeentenaam);')
+
+print("Hurray! The foreign keys are linked successfully!")
+
+
 # Close communication with the database
 cursor.close()
 connection.close()
-
-
