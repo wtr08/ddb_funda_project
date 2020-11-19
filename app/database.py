@@ -20,7 +20,7 @@ try:
         host = "localhost",
         user = DB_username,
         password = DB_password,
-        database = "suleymanekiz"
+        database = "fundaDB"
     )
     print("Database connection succesfully!")
 except Exception as err:
