@@ -79,5 +79,6 @@ funda_buurt_facilties = funda_buurt_facilties.drop(['Gemeente2018', 'Buurtcode',
 funda_gemeente_facilties_clean = funda_gemeente_facilties.dropna()
 funda_buurt_facilties_clean = funda_buurt_facilties.dropna()
 
-
-funda_buurt_facilties_clean.to_csv(f"storage/query_8.csv", sep=';' , decimal=",")
+# Export to CSV
+funda_gemeente_facilties_clean.to_csv(f"storage/query_8_1.csv", sep=';' , decimal=",")
+funda_buurt_facilties_clean.to_csv(f"storage/query_8_2.csv", sep=';' , decimal=",")
