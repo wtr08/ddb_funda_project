@@ -31,6 +31,7 @@ except Exception as err:
 
 cursor = connection.cursor()
 
+# this is a comment
 cursor.execute("SELECT *  FROM funda2018;")
 fundadata=pd.DataFrame(cursor.fetchall(),columns=['global_id', 'publicatie_datum', 'postcode', 'koopprijs', 'volledige_omschrijving', 'soort_woning', 'bouwjaar', 'oppervlakte', 'datum_ondertekening'])
 
