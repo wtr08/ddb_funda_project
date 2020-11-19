@@ -52,4 +52,4 @@ average_price_month['Relative_difference %'] = average_price_month.groupby(['Gem
 average_price_month['Relative_difference %'] = average_price_month['Relative_difference %'] * 100
 
 print(average_price_month.head())
-average_price_month.to_csv("storage/query4.csv", sep=';')
+average_price_month.to_csv("storage/query4.csv", sep=';' , decimal=",")

@@ -54,6 +54,6 @@ mean_muni = funda_gemeente.groupby(['Gemeentenaam','month'])['koopprijs'].mean()
 
 print(mean_muni.head(50))
 
-mean_muni.to_csv("storage/query1.csv", sep=';')
+mean_muni.to_csv("storage/query1.csv", sep=';', decimal=",")
 
 

@@ -49,25 +49,25 @@ del postcode_gemeente['Gemeente2018']
 
 funda_gemeente = pd.merge(fundadata, postcode_gemeente, how='left', left_on='postcode', right_on='PC6')
 
-# code = []
-# for i in cbs['Codering']:
-#     i = i[2:]
-#     while i[0] == "0":
-#         i = i[1:]
-#     code.append(i)
-# cbs['Code'] = code
-# cbs['Code'] = cbs['Code'].astype(int)
+code = []
+for i in cbs['Codering']:
+    i = i[2:]
+    while i[0] == "0":
+        i = i[1:]
+    code.append(i)
+cbs['Code'] = code
+cbs['Code'] = cbs['Code'].astype(int)
 
 funda_gemeente.head()
 
-income = cbs[['Gemeentenaam', 'Codering', 'Gemiddeld_inkomen_per_inwoner']]
+income = cbs[['Gemeentenaam', 'Code', 'Gemiddeld_inkomen_per_inwoner']]
 
-funda_gemeente_income= pd.merge(funda_gemeente, income, how='left', left_on='Gemcode', right_on='Codering')
+funda_gemeente_income= pd.merge(funda_gemeente, income, how='left', left_on='Gemcode', right_on='Code')
 
 asking = funda_gemeente_income.groupby(['Gemiddeld_inkomen_per_inwoner','Gemeentenaam_x'])['koopprijs'].mean().reset_index()
 
 asking_clean = asking.dropna().sort_values(by = ['Gemiddeld_inkomen_per_inwoner'], ascending = False)
 
 print(asking_clean.head(20))
-asking_clean.to_csv("storage/query3.csv", sep=';')
+asking_clean.to_csv("storage/query3.csv", sep=';' , decimal=",")
 

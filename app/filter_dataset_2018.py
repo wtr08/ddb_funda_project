@@ -1,3 +1,5 @@
+# One-off script to clean dataset.
+
 import pandas as pd
 
 data = pd.read_csv("/Users/woutervanrijmenam/stack/02_Projects/04_Sites/DigitalHands/funda_project/data/2018-cbs-pc6huisnr20180801_buurt -vs2/pc6hnr20180801_gwb-vs2.csv", sep=";")

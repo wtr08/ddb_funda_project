@@ -49,22 +49,22 @@ del postcode_gemeente['Gemeente2018']
 funda_gemeente = pd.merge(fundadata, postcode_gemeente, how='left', left_on='postcode', right_on='PC6')
 
 #to delete the first two letters and 0 for code
-# code = []
-# for i in cbs['Codering']:
-#     i = i[2:]
-#     while i[0] == "0":
-#         i = i[1:]
-#     code.append(i)
-# cbs['Code'] = code
-# cbs['Code'] = cbs['Code'].astype(int)
+code = []
+for i in cbs['Codering']:
+    i = i[2:]
+    while i[0] == "0":
+        i = i[1:]
+    code.append(i)
+cbs['Code'] = code
+cbs['Code'] = cbs['Code'].astype(int)
 
-dichtheid = cbs[['Gemeentenaam', 'Codering', 'Bevolkingsdichtheid']]
+dichtheid = cbs[['Gemeentenaam', 'Code', 'Bevolkingsdichtheid']]
 
 category = pd.cut(dichtheid.Bevolkingsdichtheid,bins=[0,1000,2000,3000,4000,5000,6000,7000],labels=
        ['0-1000','1001-2000','2001-3000','3001-4000','4001-5000','5001-6000','6001-7000'])
 dichtheid.insert(3, 'Density Group', category)
 
-funda_gemeente_density = pd.merge(funda_gemeente, dichtheid, how='left', left_on='Gemcode', right_on='Codering')
+funda_gemeente_density = pd.merge(funda_gemeente, dichtheid, how='left', left_on='Gemcode', right_on='Code')
 
 output = funda_gemeente_density.groupby(['Density Group','Gemeentenaam_x'])['koopprijs'].mean().reset_index()
 
@@ -72,7 +72,7 @@ output_clean = output.dropna().sort_values(by = ['koopprijs'], ascending = False
 
 print(output_clean.head(20))
 
-output_clean.to_csv("storage/query2.csv", sep=';')
+output_clean.to_csv("storage/query2.csv", sep=';', decimal=",")
 
 
 

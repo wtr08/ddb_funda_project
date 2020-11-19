@@ -53,4 +53,4 @@ median_muni_month['difference'] = median_muni_month.groupby('Gemeentenaam')['koo
 
 print(median_muni_month)
 
-median_muni_month.to_csv("storage/query5.csv", sep=';')
+median_muni_month.to_csv("storage/query5.csv", sep=';' , decimal=",")

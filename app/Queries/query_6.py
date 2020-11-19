@@ -45,14 +45,14 @@ cbs=pd.DataFrame(cursor.fetchall(),columns=['Wijken_en_buurten', 'Gemeentenaam',
 
 
 print(cbs)
-# code = []
-# for i in cbs['Codering']:
-#     i = i[2:]
-#     while i[0] == "0":
-#         i = i[1:]
-#     code.append(i)
-# cbs['Code'] = code
-# cbs['Code'] = cbs['Code'].astype(int)
+code = []
+for i in cbs['Codering']:
+    i = i[2:]
+    while i[0] == "0":
+        i = i[1:]
+    code.append(i)
+cbs['Code'] = code
+cbs['Code'] = cbs['Code'].astype(int)
 
 cbs["0tot15"]= pd.to_numeric(cbs["0tot15"])
 cbs["15tot25"]= pd.to_numeric(cbs["15tot25"])
@@ -76,7 +76,7 @@ funda_gemeente = pd.merge(fundadata, postcode_gemeente, how='left', left_on='pos
 
 mean_muni = funda_gemeente.groupby(['Gemeentenaam', 'Gemcode'])['koopprijs'].mean().reset_index()
 
-cbs_age_price = pd.merge(cbs, mean_muni, how='left', left_on='Codering', right_on='Gemcode')
+cbs_age_price = pd.merge(cbs, mean_muni, how='left', left_on='Code', right_on='Gemcode')
 
 cbs_age_price = cbs_age_price.drop(['15tot25', '25tot45', '45tot65', '65jaarofouder'], axis=1)
 
@@ -101,4 +101,4 @@ data = {'Age_group': ['0-15','15-25','25-45','45-65','65+'],
 test = pd.DataFrame(data, columns = ['Age_group','Average_price'])
 print(test)
 
-test.to_csv("storage/query6.csv", sep=';')
+test.to_csv("storage/query6.csv", sep=';' , decimal=",")

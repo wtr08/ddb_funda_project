@@ -28,6 +28,9 @@ except Exception as err:
 
 cursor = connection.cursor()
 
+# Inserting tables. First the tables is dropped if exists.
+# After A new table has been created. 
+# This could also have been done with UPDATE, but for people that are new don't have the posibility to udpate their table because it does not exits
 print("Inserting tables")
 
 # 1. [Orange] -- Setup Funda Table
@@ -60,11 +63,11 @@ cursor.execute('CREATE TABLE Gemeente_facilities_gemeentes ( Gemeentenaam VARCHA
 
 # 8. [Yellow] -- Setup Wijk_facilities_buurt Table
 cursor.execute("DROP TABLE IF EXISTS Wijk_facilities_buurt CASCADE;")
-cursor.execute('CREATE TABLE Wijk_facilities_buurt ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering INTEGER, Woningvoorraad INTEGER, Percentage_bewoond INTEGER, Percentage_onbewoond INTEGER, Diefstal_uit_woning INTEGER, Vernieling INTEGER, Geweld INTEGER, Afstand_tot_huisenpraktijk NUMERIC, Afstand_tot_grote_supermarkt NUMERIC, Afstand_tot_kinderverblijf NUMERIC, Afstand_tot_school NUMERIC );')
+cursor.execute('CREATE TABLE Wijk_facilities_buurt ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering varchar, Woningvoorraad INTEGER, Percentage_bewoond INTEGER, Percentage_onbewoond INTEGER, Diefstal_uit_woning INTEGER, Vernieling INTEGER, Geweld INTEGER, Afstand_tot_huisenpraktijk NUMERIC, Afstand_tot_grote_supermarkt NUMERIC, Afstand_tot_kinderverblijf NUMERIC, Afstand_tot_school NUMERIC );')
 
 # 9. [Yellow] -- Setup CBS_municipality Table
 cursor.execute("DROP TABLE IF EXISTS CBS_Municipality CASCADE;")
-cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering INTEGER, Mannen INTEGER, Vrouwen INTEGER, _0_tot_15 INTEGER, _15_tot_25 INTEGER, _25_tot_45 INTEGER, _45_tot_65 INTEGER, _65_or_older INTEGER, Bevolkingsdichtheid INTEGER, Gemiddeld_inkomen_per_inwoner NUMERIC );')
+cursor.execute('CREATE TABLE CBS_Municipality ( Wijken_en_buurten VARCHAR, Gemeentenaam VARCHAR, Soort_regio VARCHAR, Codering varchar, Mannen INTEGER, Vrouwen INTEGER, _0_tot_15 INTEGER, _15_tot_25 INTEGER, _25_tot_45 INTEGER, _45_tot_65 INTEGER, _65_or_older INTEGER, Bevolkingsdichtheid INTEGER, Gemiddeld_inkomen_per_inwoner NUMERIC );')
 
 
 # 10. [Green] -- Setup gemiddelde_verkoopprijzen Table
@@ -73,28 +76,8 @@ cursor.execute('CREATE TABLE Gemiddelde_verkoopprijzen ( Gemeentenaam VARCHAR NO
 
 connection.commit()
 
-# ## STEP 3 -> Connect keys among each other
-# #1##########connecting funda2018(postcode) with postcode2018(pc6)##
-# cursor.execute('ALTER TABLE funda2018 ADD FOREIGN KEY (postcode) REFERENCES postcode2018(pc6);')
-# #2#### connecting postcode2018(Buurt2018) with buurtnaam2018(buurtcode)##
-# cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Buurt2018) REFERENCES buurtnaam2018 (buurtcode);')
-# #3# connecting postcode2018(Wijk2018) with wijknaam2018(Wijkcode)##
-# cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Wijk2018) REFERENCES wijknaam2018(Wijkcode);')
-# #4# connecting postcode2018(Gemeente2018) with gemeentenaam2018(Gemcode) ##
-# cursor.execute('ALTER TABLE postcode2018 ADD FOREIGN KEY (Gemeente2018) REFERENCES gemeentenaam2018(Gemcode);')
-# #5# connecting gemeentenaam2018(gemeentenaam) with gemeente_afstand_facilities (Gemeentenaam);
-# cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY (gemeentenaam) REFERENCES gemeente_afstand_facilities (Gemeentenaam);')
-# #6#
-# cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY(Gemeentenaam) REFERENCES gemeente_facilities_gemeentes(Gemeentenaam);')
-# #7#
-# cursor.execute('ALTER TABLE wijk_facilities_buurt ADD FOREIGN KEY (Codering) REFERENCES buurtnaam2018(Buurtcode);')
-# #8#
-# cursor.execute('ALTER TABLE cbs_municipality ADD FOREIGN KEY (codering) REFERENCES gemeentenaam2018(Gemcode);')
-# #9# 
-# cursor.execute('ALTER TABLE gemeentenaam2018 ADD FOREIGN KEY (gemeentenaam) REFERENCES gemiddelde_verkoopprijzen(gemeentenaam);')
-
-
 print("loading data")
+
 ## -- Load data into tables -- ###
 ## 1. Orange (funda2018)
 ## 1.1 funda2018
