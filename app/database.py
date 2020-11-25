@@ -90,7 +90,7 @@ print("Loading data...")
 ## 1.1 funda2018
 csv_file_name = f"{path}/data/1_Orange/suley_tested/funda2018_utf8.csv"
 sql = "COPY funda2018_dirty FROM STDIN DELIMITER ';' CSV HEADER"
-cursor.copy_expert(sql, open(csv_file_name, "r"))
+cursor.copy_expert(sql, open(csv_file_name, "r", encoding="utf-8"))
 cursor.execute("COMMIT;")
 
 # ## 2. Pink (Postcode 2018)
