@@ -31,7 +31,7 @@ except Exception as err:
 cursor = connection.cursor()
 
 
-cursor.execute("SELECT *  FROM funda2018;")
+cursor.execute("SELECT global_id, publicatie_datum, postcode, koopprijs, volledige_omschrijving, soort_woning, bouwjaar, oppervlakte, datum_ondertekening FROM funda2018;")
 fundadata=pd.DataFrame(cursor.fetchall(),columns=['global_id', 'publicatie_datum', 'postcode', 'koopprijs', 'volledige_omschrijving', 'soort_woning', 'bouwjaar', 'oppervlakte', 'datum_ondertekening'])
 
 cursor.execute("SELECT *  FROM postcode2018;")
@@ -63,14 +63,14 @@ funda_buurt_code = funda_buurt_code.drop(['publicatie_datum', 'koopprijs', 'voll
 
 
 
-code = []
-for i in wijk_facilities['codering']:
-    i = i[2:]
-    while i[0] == "0":
-        i = i[1:]
-    code.append(i)
-wijk_facilities['codering'] = code
-wijk_facilities['codering'] = wijk_facilities['codering'].astype(int)
+# code = []
+# for i in wijk_facilities['codering']:
+#     i = i[2:]
+#     while i[0] == "0":
+#         i = i[1:]
+#     code.append(i)
+# wijk_facilities['codering'] = code
+# wijk_facilities['codering'] = wijk_facilities['codering'].astype(int)
 
 funda_gemeente_facilties = pd.merge(funda_gemeente_code, gemeente_facilities, how='left', left_on='Gemeentenaam', right_on='Gemeentenaam')
 funda_buurt_facilties = pd.merge(funda_buurt_code, wijk_facilities, how='left', left_on='Buurtcode', right_on='codering')
